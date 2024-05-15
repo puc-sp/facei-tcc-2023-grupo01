@@ -57,7 +57,7 @@ if VIDEO_PATH:
         global class_counts, class_sum, class_max, num_frames_processed
 
         # Process every 10th frame
-        if index % 100 != 0:
+        if index % 70 != 0:
             return frame
 
         results = model(frame, imgsz=1280)[0]
