@@ -9,6 +9,7 @@ import supervision as sv
 from ultralytics import YOLO
 import random
 import matplotlib.pyplot as plt
+import time
 ssl._create_default_https_context = ssl._create_unverified_context
 
 st.sidebar.title("Otimizando o desenvolvimento infantil com tecnologia: reconhecimento de objetos em vídeos do YouTube")
@@ -80,10 +81,19 @@ def process_frame(frame: np.ndarray, index) -> np.ndarray:
 
 st.title("YouTube Video Object Detection")
 
+#carregamento = "_Importando o vídeo e fazendo detecções..._"
+
+
+#def stream_data():
+#    for word in carregamento.split(" "):
+#        yield word + " "
+#        time.sleep(0.02)
+
 # User input for YouTube video URL
 video_url = st.text_input("Insira a URL de um vídeo do YouTube:")
 frame_interval = 10  # Adjust as needed
 if st.button("Processar vídeo"):
+    #st.write_stream(stream_data)
     st.caption('_Importando o vídeo e fazendo detecções..._')
     video_path = retrieve_video_from_youtube(video_url)
     if video_path:
@@ -101,6 +111,20 @@ if st.button("Processar vídeo"):
         st.pyplot(fig)
 
         # Display class-wise statistics
+        data = {
+            "Class": [],
+            "Total Detections": [],
+            "Average Detections per Frame": [],
+            "Maximum Detections in a Single Frame": []
+        }
+
+        for class_name in class_counts:
+            data["Class"].append(class_name)
+            data["Total Detections"].append(class_counts[class_name])
+            data["Average Detections per Frame"].append(round(class_sum[class_name] / num_frames_processed, 2))
+            data["Maximum Detections in a Single Frame"].append(class_max[class_name])
+
+        st.dataframe(data)
         for class_name in class_counts:
             st.write(f"Class: {class_name}, Detected {class_counts[class_name]} times")
             st.write(f"Average detections per frame: {round(class_sum[class_name] / num_frames_processed)}")
