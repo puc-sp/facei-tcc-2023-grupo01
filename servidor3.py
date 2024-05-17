@@ -9,9 +9,8 @@ import supervision as sv
 from ultralytics import YOLO
 import random
 import matplotlib.pyplot as plt
-import time
 ssl._create_default_https_context = ssl._create_unverified_context
-
+st.set_page_config(page_title='Animal Detection', layout="wide")
 st.sidebar.title("Otimizando o desenvolvimento infantil com tecnologia: reconhecimento de objetos em vídeos do YouTube")
 st.sidebar.subheader("Alunas: Ana Beatriz O. de Macedo e Bruna Bellini Faria")
 st.sidebar.markdown("<p style='text-align: justify;'>Este estudo apresenta uma plataforma de detecção resultante de uma metodologia de otimização no reconhecimento de objetos para crianças em estágios iniciais de desenvolvimento cognitivo, especialmente em ambientes digitais ricos em conteúdo de streaming, como vídeos do YouTube. O trabalho destaca a importância da diversidade de estímulos visuais no crescimento cognitivo infantil e propõe a implementação de uma rede neural específica, denominada You Only Look Once, para identificar eficientemente uma ampla gama de objetos em vídeos.</p>", unsafe_allow_html=True)
@@ -80,6 +79,8 @@ def process_frame(frame: np.ndarray, index) -> np.ndarray:
     return frame
 
 st.title("YouTube Video Object Detection")
+with st.expander("🚨 Atenção"):
+    st.write("O modelo faz detecções de 100 em 100 frames para otimizar o processo. Dessa forma, o vídeo pode demorar um pouco para ser processado.")
 
 #carregamento = "_Importando o vídeo e fazendo detecções..._"
 
@@ -109,6 +110,7 @@ if st.button("Processar vídeo"):
             ax.axis('off')
 
         st.pyplot(fig)
+        st.caption("Amostra de detecções em 9 frames aleatórios do vídeo")
 
         # Display class-wise statistics
         data = {
@@ -123,9 +125,9 @@ if st.button("Processar vídeo"):
             data["Total Detections"].append(class_counts[class_name])
             data["Average Detections per Frame"].append(round(class_sum[class_name] / num_frames_processed, 2))
             data["Maximum Detections in a Single Frame"].append(class_max[class_name])
-
+        st.subheader("Estatísticas das detecções")
         st.dataframe(data)
-        for class_name in class_counts:
-            st.write(f"Class: {class_name}, Detected {class_counts[class_name]} times")
-            st.write(f"Average detections per frame: {round(class_sum[class_name] / num_frames_processed)}")
-            st.write(f"Maximum detections in a single frame: {class_max[class_name]}")
+        #for class_name in class_counts:
+        #    st.write(f"Class: {class_name}, Detected {class_counts[class_name]} times")
+        #    st.write(f"Average detections per frame: {round(class_sum[class_name] / num_frames_processed)}")
+        #    st.write(f"Maximum detections in a single frame: {class_max[class_name]}")
